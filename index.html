@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ICML Submission 2607 Rebuttal Supplementary Material</title>
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <div class="page">
+    <header class="site-header">
+      <h1>ICML Submission 2607 Rebuttal Supplementary Material</h1>
+      <p class="subtitle">Singular Proxies for Adaptive Caching in Diffusion Language Models</p>
+    </header>
+
+    <main>
+      <section class="section-card" id="sec-1">
+        <h2>1. Extended Discussion on Figure 1</h2>
+        <p class="caption">
+          <strong>Figure 1:</strong> Extended analysis of adjacent-step state similarities. We visualize the similarities across four features (input, value, singular proxy, and output) for representative layers (1, 12, 24, and 32) of LLaDA-8B-Instruct. The value proxy uncovers drift in the final FFN output more effectively than input states. Furthermore, the singular proxy's near-identical behavior to the value proxy suggests that a low-rank approximation effectively captures value-space drift. In the first layer, drift is confined to the most recently decoded tokens, resulting in an approximated diagonal structure; off-diagonal elements indicate non-strict left-to-right decoding patterns. In later layers, drift propagates to more tokens via self-attention. By the last layer (32rd layer), a lower-triangular pattern emerges, indicating that final output states fluctuate mainly among previously decoded tokens while more distant further tokens remain stable.
+        </p>
+
+        <div class="figure-grid two-col">
+          <figure class="figure-card ratio-square">
+            <a class="figure-pdf-link" href="assets/sim_heatmap_1.pdf" target="_blank" rel="noopener" aria-label="Figure 1 - Layer 1 similarity heatmap (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/sim_heatmap_1.pdf"></canvas>
+            </a>
+          </figure>
+          <figure class="figure-card ratio-square">
+            <a class="figure-pdf-link" href="assets/sim_heatmap_12.pdf" target="_blank" rel="noopener" aria-label="Figure 1 - Layer 12 similarity heatmap (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/sim_heatmap_12.pdf"></canvas>
+            </a>
+          </figure>
+          <figure class="figure-card ratio-square">
+            <a class="figure-pdf-link" href="assets/sim_heatmap_24.pdf" target="_blank" rel="noopener" aria-label="Figure 1 - Layer 24 similarity heatmap (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/sim_heatmap_24.pdf"></canvas>
+            </a>
+          </figure>
+          <figure class="figure-card ratio-square">
+            <a class="figure-pdf-link" href="assets/sim_heatmap_32.pdf" target="_blank" rel="noopener" aria-label="Figure 1 - Layer 32 similarity heatmap (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/sim_heatmap_32.pdf"></canvas>
+            </a>
+          </figure>
+        </div>
+
+        <p class="caption">
+          <strong>Figure 2:</strong> Magnitude of drift across layers and decoding steps. To quantify drift intensity, we plot the fraction of drifting tokens across various similarity thresholds (0.1-0.9). Middle layers exhibit higher drift magnitudes compared to early and late layers, aligning with our observations in Section 3.4 and motivating our layer-wise adaptive budget allocation. The relative stability of drift magnitude across decoding steps justifies the use of a step-invariant budget.
+        </p>
+        <div class="figure-grid one-col">
+          <figure class="figure-card ratio-wide">
+            <a class="figure-pdf-link" href="assets/sim_threshold_heatmap.pdf" target="_blank" rel="noopener" aria-label="Figure 2 - Drift threshold heatmap (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/sim_threshold_heatmap.pdf"></canvas>
+            </a>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section-card" id="sec-2">
+        <h2>2. Additional Comparison with dKV-Cache, Elastic-Cache, and d2Cache</h2>
+        <p class="caption">
+          <strong>Table 1:</strong> Performance comparison against KV cache baselines (dKV-Cache, Elastic-Cache, and d2Cache). Metrics include Tokens Per Second (TPS), Time To First Token (TTFT), and Accuracy (std. dev. in parentheses) on LLaDA-8B-Instruct and Dream-v0-Instruct-7B.
+        </p>
+        <div class="legend-note">Rows marked as Ours are highlighted.</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th rowspan="2" class="left">Dataset</th>
+                <th rowspan="2" class="left">Method</th>
+                <th colspan="3">LLaDA-8B-Instruct</th>
+                <th colspan="3">Dream-v0-Instruct-7B</th>
+              </tr>
+              <tr>
+                <th>TPS</th>
+                <th>TTFT</th>
+                <th>Accuracy</th>
+                <th>TPS</th>
+                <th>TTFT</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="5" class="left">GSM8K</td>
+                <td class="left">Baseline</td>
+                <td>29.67</td>
+                <td>28.0</td>
+                <td>78.62 (1.13)</td>
+                <td>17.86</td>
+                <td>23.6</td>
+                <td>75.21 (1.19)</td>
+              </tr>
+              <tr>
+                <td class="left">dKV-Cache</td>
+                <td>56.97</td>
+                <td>28.9</td>
+                <td>78.01 (1.14)</td>
+                <td>22.17</td>
+                <td>24.4</td>
+                <td>74.82 (1.20)</td>
+              </tr>
+              <tr>
+                <td class="left">Elastic-Cache</td>
+                <td>48.00</td>
+                <td>27.4</td>
+                <td>77.41 (1.15)</td>
+                <td>35.77</td>
+                <td>23.9</td>
+                <td>74.86 (1.22)</td>
+              </tr>
+              <tr>
+                <td class="left">d2Cache</td>
+                <td>26.85</td>
+                <td>28.7</td>
+                <td>76.42 (1.17)</td>
+                <td>28.92</td>
+                <td>24.9</td>
+                <td>78.70 (1.13)</td>
+              </tr>
+              <tr class="highlight-ours">
+                <td class="left">Ours</td>
+                <td>190.73</td>
+                <td>28.7</td>
+                <td>78.24 (1.14)</td>
+                <td>45.97</td>
+                <td>24.5</td>
+                <td>77.56 (1.15)</td>
+              </tr>
+              <tr>
+                <td rowspan="5" class="left">MBPP</td>
+                <td class="left">Baseline</td>
+                <td>5.75</td>
+                <td>28.7</td>
+                <td>39.20</td>
+                <td>36.51</td>
+                <td>22.2</td>
+                <td>57.40</td>
+              </tr>
+              <tr>
+                <td class="left">dKV-Cache</td>
+                <td>7.83</td>
+                <td>28.1</td>
+                <td>39.20</td>
+                <td>39.56</td>
+                <td>22.2</td>
+                <td>56.40</td>
+              </tr>
+              <tr>
+                <td class="left">Elastic-Cache</td>
+                <td>16.25</td>
+                <td>29.2</td>
+                <td>34.80</td>
+                <td>85.60</td>
+                <td>22.1</td>
+                <td>52.80</td>
+              </tr>
+              <tr>
+                <td class="left">d2Cache</td>
+                <td>25.08</td>
+                <td>28.2</td>
+                <td>39.60</td>
+                <td>41.87</td>
+                <td>21.6</td>
+                <td>57.60</td>
+              </tr>
+              <tr class="highlight-ours">
+                <td class="left">Ours</td>
+                <td>46.12</td>
+                <td>28.7</td>
+                <td>39.00</td>
+                <td>114.85</td>
+                <td>22.6</td>
+                <td>57.60</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section-card" id="sec-3">
+        <h2>3. Additional Ablation Study on Singular Proxy Rank</h2>
+
+        <p class="caption"><strong>Table 2:</strong> Influence of singular proxy rank ($r$) on LLaDA-8B-Instruct (MBPP).</p>
+        <div class="legend-note">In Tables 2-5, highlighted rows denote the default configuration marked with *.</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="left">Method</th>
+                <th>TPS</th>
+                <th>TTFT</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="left">Baseline</td>
+                <td>5.75</td>
+                <td>28.7</td>
+                <td>39.20</td>
+              </tr>
+              <tr>
+                <td class="left">Ours ($r=512$)</td>
+                <td>42.60</td>
+                <td>28.6</td>
+                <td>39.00</td>
+              </tr>
+              <tr>
+                <td class="left">Ours ($r=256$)</td>
+                <td>44.32</td>
+                <td>28.8</td>
+                <td>38.80</td>
+              </tr>
+              <tr class="highlight-default">
+                <td class="left">Ours ($r=128$) *</td>
+                <td>46.12</td>
+                <td>28.7</td>
+                <td>39.00</td>
+              </tr>
+              <tr>
+                <td class="left">Ours ($r=64$)</td>
+                <td>47.29</td>
+                <td>27.9</td>
+                <td>38.80</td>
+              </tr>
+              <tr>
+                <td class="left">Ours ($r=32$)</td>
+                <td>47.13</td>
+                <td>28.4</td>
+                <td>38.20</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="caption"><strong>Table 3:</strong> Influence of singular proxy rank ($r$) on Dream-v0-Instruct-7B (GSM8K).</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="left">Method</th>
+                <th>TPS</th>
+                <th>TTFT</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="left">Baseline</td>
+                <td>17.86</td>
+                <td>23.6</td>
+                <td>75.21 (1.19)</td>
+              </tr>
+              <tr>
+                <td class="left">Ours ($r=128$)</td>
+                <td>43.02</td>
+                <td>24.9</td>
+                <td>77.63 (1.15)</td>
+              </tr>
+              <tr>
+                <td class="left">Ours ($r=64$)</td>
+                <td>45.69</td>
+                <td>24.6</td>
+                <td>77.48 (1.15)</td>
+              </tr>
+              <tr class="highlight-default">
+                <td class="left">Ours ($r=32$) *</td>
+                <td>45.97</td>
+                <td>24.5</td>
+                <td>77.56 (1.15)</td>
+              </tr>
+              <tr>
+                <td class="left">Ours ($r=16$)</td>
+                <td>46.03</td>
+                <td>24.3</td>
+                <td>76.35 (1.17)</td>
+              </tr>
+              <tr>
+                <td class="left">Ours ($r=8$)</td>
+                <td>45.87</td>
+                <td>24.4</td>
+                <td>75.19 (1.17)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section-card" id="sec-4">
+        <h2>4. Sensitivity Analysis of Adaptive Budget Allocation</h2>
+        <p class="caption">
+          <strong>Figure 3:</strong> Visualization of four noisy configurations. We evaluate the robustness of our Adaptive Budget Allocation by shifting $l_p$ away from its optimal value across four noisy configurations as shown below.
+        </p>
+        <div class="figure-grid one-col">
+          <figure class="figure-card ratio-wide">
+            <a class="figure-pdf-link" href="assets/budget_ablation_LLaDA-8B-Instruct.pdf" target="_blank" rel="noopener" aria-label="Figure 3 - Budget allocation noisy configurations (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/budget_ablation_LLaDA-8B-Instruct.pdf"></canvas>
+            </a>
+          </figure>
+        </div>
+
+        <p class="caption">
+          <strong>Table 4:</strong> Impact of $l_p$ variations on LLaDA-8B-Instruct (GSM8K). Our primary configuration balances efficiency and accuracy optimally. Performance remains stable despite variations in $l_p$, demonstrating the robustness of our adaptive strategy.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="left">Method</th>
+                <th>Peak $\rho_p$</th>
+                <th>Avg $\bar{\rho}$</th>
+                <th>TPS</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="left">Baseline</td>
+                <td>100%</td>
+                <td>100%</td>
+                <td>29.67</td>
+                <td>78.62 (1.13)</td>
+              </tr>
+              <tr>
+                <td class="left">Ours</td>
+                <td>25%</td>
+                <td>25%</td>
+                <td>164.88</td>
+                <td>78.59 (1.13)</td>
+              </tr>
+              <tr>
+                <td class="left">Ours</td>
+                <td>16%</td>
+                <td>16%</td>
+                <td>190.06</td>
+                <td>75.65 (1.17)</td>
+              </tr>
+              <tr class="highlight-default">
+                <td class="left">Ours *</td>
+                <td>25%</td>
+                <td>16%</td>
+                <td>190.73</td>
+                <td>78.24 (1.14)</td>
+              </tr>
+              <tr>
+                <td class="left">Ours (Noisy 0)</td>
+                <td>25%</td>
+                <td>16%</td>
+                <td>191.43</td>
+                <td>77.17 (1.14)</td>
+              </tr>
+              <tr>
+                <td class="left">Ours (Noisy 1)</td>
+                <td>25%</td>
+                <td>16%</td>
+                <td>189.32</td>
+                <td>77.77 (1.13)</td>
+              </tr>
+              <tr>
+                <td class="left">Ours (Noisy 2)</td>
+                <td>25%</td>
+                <td>16%</td>
+                <td>189.64</td>
+                <td>77.95 (1.16)</td>
+              </tr>
+              <tr>
+                <td class="left">Ours (Noisy 3)</td>
+                <td>25%</td>
+                <td>16%</td>
+                <td>190.18</td>
+                <td>76.41 (1.15)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section-card" id="sec-5">
+        <h2>5. Empirical Validation of Theoretical Assumptions in Section 3</h2>
+
+        <h3>5.1 Bounded Drift Assumption (Theorem 3.1)</h3>
+        <p class="caption">
+          <strong>Figure 4:</strong> Empirical distribution of drift ratio $\lambda$. We measure $\lambda = \frac{\sum_{j}\alpha^{t+1}_{ij}\|v^{t+1}_{j} - v^{t}_{j}\|}{\|v^{t+1}_{i} - v^{t}_{i}\|}$ across layers and steps for LLaDA-8B-Instruct and Dream-v0-Instruct-7B. Although $\lambda$ varies across layers, it generally remains below 4, and decreases below 2 in later layers, supporting the bounded drift assumption.
+        </p>
+        <div class="figure-grid two-col">
+          <figure class="figure-card ratio-wide">
+            <a class="figure-pdf-link" href="assets/assumption_bound_LLaDA-8B-Instruct.pdf" target="_blank" rel="noopener" aria-label="Figure 4 - Bounded drift assumption for LLaDA (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/assumption_bound_LLaDA-8B-Instruct.pdf"></canvas>
+            </a>
+          </figure>
+          <figure class="figure-card ratio-wide">
+            <a class="figure-pdf-link" href="assets/assumption_bound_Dream-v0-Instruct-7B.pdf" target="_blank" rel="noopener" aria-label="Figure 4 - Bounded drift assumption for Dream (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/assumption_bound_Dream-v0-Instruct-7B.pdf"></canvas>
+            </a>
+          </figure>
+        </div>
+
+        <h3>5.2 Bounded Norm Assumption (Theorem 3.1)</h3>
+        <p class="caption">
+          <strong>Figure 5:</strong> Norm distributions of $v$ and $h$. Visualizing $\|v\|$ and $\|h\|$ across decoding steps and layers confirms that state norms remain within stable, bounded ranges for both models.
+        </p>
+        <div class="figure-grid two-col">
+          <figure class="figure-card ratio-wide">
+            <a class="figure-pdf-link" href="assets/assumption_norm_LLaDA-8B-Instruct.pdf" target="_blank" rel="noopener" aria-label="Figure 5 - Norm distributions for LLaDA (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/assumption_norm_LLaDA-8B-Instruct.pdf"></canvas>
+            </a>
+          </figure>
+          <figure class="figure-card ratio-wide">
+            <a class="figure-pdf-link" href="assets/assumption_norm_Dream-v0-Instruct-7B.pdf" target="_blank" rel="noopener" aria-label="Figure 5 - Norm distributions for Dream (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/assumption_norm_Dream-v0-Instruct-7B.pdf"></canvas>
+            </a>
+          </figure>
+        </div>
+
+        <h3>5.3 The Truncated Subspace Assumption (Theorem 3.4)</h3>
+        <p class="caption">
+          <strong>Figure 6:</strong> Validation of the Truncated Subspace Assumption ($h \in \mathcal{span}(V_r)$) via Projection Energy Ratio (PER). We calculate PER as $\frac{1}{N}\sum_{i=1}^{N}\frac{\|V_r V_r^T h_i\|^2}{\|h_i\|^2}$. A PER near 1 indicates that the subspace $\text{span}(V_r)$ effectively captures the energy of states $h$. For both models, PER exceeds 0.9 across all layers when $r >= 128$ (LLaDA) or $r >= 32$ (Dream), validating our subspace truncation approach.
+        </p>
+        <div class="figure-grid one-col">
+          <figure class="figure-card ratio-wide">
+            <a class="figure-pdf-link" href="assets/span_assumption.pdf" target="_blank" rel="noopener" aria-label="Figure 6 - Truncated subspace assumption (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/span_assumption.pdf"></canvas>
+            </a>
+          </figure>
+        </div>
+
+        <h3>5.4 Stable Attention Assumption (Theorem 3.1)</h3>
+        <p class="caption">
+          <strong>Figure 7:</strong> Empirical distribution of attention shift. We observe that $\delta_A = \sum_{j}|\alpha^{t+1}_{ij} - \alpha^t_{ij}|$ is generally small. A transient spike in $\delta_A$ occurs during the initial decoding step for LLaDA-8B; however, as shown in Table 5, this does not negatively impact final performance.
+        </p>
+        <div class="figure-grid two-col">
+          <figure class="figure-card ratio-wide">
+            <a class="figure-pdf-link" href="assets/assumption_attn_LLaDA-8B-Instruct.pdf" target="_blank" rel="noopener" aria-label="Figure 7 - Stable attention assumption for LLaDA (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/assumption_attn_LLaDA-8B-Instruct.pdf"></canvas>
+            </a>
+          </figure>
+          <figure class="figure-card ratio-wide">
+            <a class="figure-pdf-link" href="assets/assumption_attn_Dream-v0-Instruct-7B.pdf" target="_blank" rel="noopener" aria-label="Figure 7 - Stable attention assumption for Dream (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/assumption_attn_Dream-v0-Instruct-7B.pdf"></canvas>
+            </a>
+          </figure>
+        </div>
+
+        <p class="caption">
+          <strong>Table 5:</strong> Impact of warm-up steps on LLaDA-8B (GSM8K). Disabling caching for the initial 2-4 steps (warm-up) to account for the $\delta_A$ spike yields no significant accuracy gain while reducing efficiency. We decide to omit warm-up steps in the final configuration.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="left">Method</th>
+                <th>Warm-up Steps</th>
+                <th>TPS</th>
+                <th>TTFT</th>
+                <th>Accuracy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="left">Baseline</td>
+                <td>-</td>
+                <td>29.67</td>
+                <td>28.0</td>
+                <td>78.62 (1.13)</td>
+              </tr>
+              <tr class="highlight-default">
+                <td class="left">Ours *</td>
+                <td>0</td>
+                <td>190.73</td>
+                <td>28.7</td>
+                <td>78.24 (1.14)</td>
+              </tr>
+              <tr>
+                <td class="left">Ours</td>
+                <td>2</td>
+                <td>185.41</td>
+                <td>28.1</td>
+                <td>78.86 (1.14)</td>
+              </tr>
+              <tr>
+                <td class="left">Ours</td>
+                <td>4</td>
+                <td>177.41</td>
+                <td>28.0</td>
+                <td>78.69 (1.13)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section-card" id="sec-6">
+        <h2>6. Throughput-Memory Trade-off Analysis</h2>
+        <p class="caption">
+          <strong>Figure 8:</strong> Efficiency-memory trade-off across varying batch sizes. We evaluate the relationship between throughput (TPS) and GPU memory consumption. As batch size increases, throughput improves due to enhanced hardware utilization and parallelism. However, this gain is balanced by a concurrent increase in memory footprint.
+        </p>
+        <div class="figure-grid one-col">
+          <figure class="figure-card ratio-wide">
+            <a class="figure-pdf-link" href="assets/batch_size_tps_memory.pdf" target="_blank" rel="noopener" aria-label="Figure 8 - Throughput memory trade-off (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/batch_size_tps_memory.pdf"></canvas>
+            </a>
+          </figure>
+        </div>
+      </section>
+
+      <p class="footer-note">Prepared for reviewer reference.</p>
+    </main>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script>
+    (function renderPdfFigures() {
+      if (!window.pdfjsLib) {
+        return;
+      }
+
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+      const canvases = Array.from(document.querySelectorAll('.pdf-canvas'));
+      const renderTasks = new Map();
+
+      async function drawCanvas(canvas) {
+        const pdfPath = canvas.dataset.pdf;
+        if (!pdfPath) {
+          return;
+        }
+
+        if (renderTasks.has(canvas)) {
+          return;
+        }
+
+        const task = (async () => {
+          try {
+            const loadingTask = window.pdfjsLib.getDocument(pdfPath);
+            const pdf = await loadingTask.promise;
+            const page = await pdf.getPage(1);
+
+            const parentWidth = canvas.parentElement.clientWidth || canvas.clientWidth || 900;
+            const baseViewport = page.getViewport({ scale: 1 });
+            const scale = parentWidth / baseViewport.width;
+            const viewport = page.getViewport({ scale: Math.max(scale, 0.1) });
+
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = Math.floor(viewport.width * dpr);
+            canvas.height = Math.floor(viewport.height * dpr);
+
+            const context = canvas.getContext('2d', { alpha: false });
+            context.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            await page.render({
+              canvasContext: context,
+              viewport
+            }).promise;
+
+            canvas.dataset.rendered = 'true';
+          } catch (error) {
+            canvas.dataset.rendered = 'error';
+          }
+        })();
+
+        renderTasks.set(canvas, task);
+        await task;
+        renderTasks.delete(canvas);
+      }
+
+      let resizeTimer = null;
+      function scheduleRerender() {
+        if (resizeTimer) {
+          window.clearTimeout(resizeTimer);
+        }
+        resizeTimer = window.setTimeout(function rerenderAll() {
+          canvases.forEach((canvas) => {
+            canvas.dataset.rendered = 'pending';
+            drawCanvas(canvas);
+          });
+        }, 180);
+      }
+
+      canvases.forEach((canvas) => {
+        canvas.dataset.rendered = 'pending';
+        drawCanvas(canvas);
+      });
+
+      window.addEventListener('resize', scheduleRerender);
+    })();
+  </script>
+</body>
+</html>
