@@ -96,7 +96,7 @@
             <tbody>
               <tr>
                 <td rowspan="5" class="left">GSM8K</td>
-                <td class="left">Baseline</td>
+                <td class="left">Vanilla</td>
                 <td>29.67</td>
                 <td>28.0</td>
                 <td>78.62 (1.13)</td>
@@ -142,7 +142,7 @@
               </tr>
               <tr>
                 <td rowspan="5" class="left">MBPP</td>
-                <td class="left">Baseline</td>
+                <td class="left">Vanilla</td>
                 <td>5.75</td>
                 <td>28.7</td>
                 <td>39.20</td>
@@ -192,15 +192,15 @@
       </section>
 
       <section class="section-card" id="sec-3">
-        <h2>3. Additional Ablation Study on Singular Proxy Rank</h2>
+        <h2>3. Additional Ablation Study on Proxy and Singular Rank</h2>
 
-        <p class="caption"><strong>Table 2:</strong> Influence of singular proxy rank ($r$) on LLaDA-8B-Instruct (MBPP).</p>
+        <p class="caption"><strong>Table 2:</strong> Influence of proxy and singular rank ($r$) on LLaDA-8B-Instruct (MBPP).</p>
         <!-- <div class="legend-note">In Tables 2-5, highlighted rows denote the default configuration marked with *.</div> -->
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th class="left">Method</th>
+                <th class="left">Proxy</th>
                 <th>TPS</th>
                 <th>TTFT</th>
                 <th>Accuracy</th>
@@ -208,10 +208,40 @@
             </thead>
             <tbody>
               <tr>
-                <td class="left">Baseline</td>
+                <td class="left">Vanilla</td>
                 <td>5.75</td>
                 <td>28.7</td>
                 <td>39.20</td>
+              </tr>
+              <tr>
+                <td class="left">Query</td>
+                <td>40.21</td>
+                <td>28.4</td>
+                <td>36.40</td>
+              </tr>
+              <tr>
+                <td class="left">Key</td>
+                <td>39.83</td>
+                <td>28.3</td>
+                <td>36.20</td>
+              </tr>
+              <tr>
+                <td class="left">Value</td>
+                <td>40.46</td>
+                <td>28.4</td>
+                <td>39.60</td>
+              </tr>
+              <tr>
+                <td class="left">Attn Input</td>
+                <td>42.86</td>
+                <td>28.2</td>
+                <td>38.20</td>
+              </tr>
+              <tr>
+                <td class="left">Attn Output</td>
+                <td>32.85</td>
+                <td>27.5</td>
+                <td>31.40</td>
               </tr>
               <tr>
                 <td class="left">Ours ($r=512$)</td>
@@ -247,12 +277,12 @@
           </table>
         </div>
 
-        <p class="caption"><strong>Table 3:</strong> Influence of singular proxy rank ($r$) on Dream-v0-Instruct-7B (GSM8K).</p>
+        <p class="caption"><strong>Table 3:</strong> Influence of proxy and singular rank ($r$) on Dream-v0-Instruct-7B (GSM8K).</p>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th class="left">Method</th>
+                <th class="left">Proxy</th>
                 <th>TPS</th>
                 <th>TTFT</th>
                 <th>Accuracy</th>
@@ -260,10 +290,40 @@
             </thead>
             <tbody>
               <tr>
-                <td class="left">Baseline</td>
+                <td class="left">Vanilla</td>
                 <td>17.86</td>
                 <td>23.6</td>
                 <td>75.21 (1.19)</td>
+              </tr>
+              <tr>
+                <td class="left">Query</td>
+                <td>40.50</td>
+                <td>24.1</td>
+                <td>74.37 (1.17)</td>
+              </tr>
+              <tr>
+                <td class="left">Key</td>
+                <td>41.02</td>
+                <td>24.2</td>
+                <td>76.04 (1.18)</td>
+              </tr>
+              <tr>
+                <td class="left">Value</td>
+                <td>40.93</td>
+                <td>23.6</td>
+                <td>76.21 (1.19)</td>
+              </tr>
+              <tr>
+                <td class="left">Attn Input</td>
+                <td>42.23</td>
+                <td>24.3</td>
+                <td>75.84 (1.17)</td>
+              </tr>
+              <tr>
+                <td class="left">Attn Output</td>
+                <td>36.23</td>
+                <td>23.3</td>
+                <td>72.40 (1.19)</td>
               </tr>
               <tr>
                 <td class="left">Ours ($r=128$)</td>
@@ -319,7 +379,7 @@
             </thead>
             <tbody>
               <tr>
-                <td class="left">Baseline</td>
+                <td class="left">Vanilla</td>
                 <td>100%</td>
                 <td>100%</td>
                 <td>29.67</td>
@@ -472,7 +532,7 @@
             </thead>
             <tbody>
               <tr>
-                <td class="left">Baseline</td>
+                <td class="left">Vanilla</td>
                 <td>-</td>
                 <td>29.67</td>
                 <td>28.0</td>
