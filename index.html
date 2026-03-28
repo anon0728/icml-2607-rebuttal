@@ -29,7 +29,8 @@
       <section class="section-card" id="sec-1">
         <h2>1. Extended Discussion on Figure 1</h2>
         <p class="caption">
-          <strong>Figure 1:</strong> Extended analysis of adjacent-step state similarities. We visualize the similarities across four features (input, value, singular proxy, and output) for representative layers (1, 12, 24, and 32) of LLaDA-8B-Instruct. The value proxy uncovers drift in the final FFN output more effectively than input states. Furthermore, the singular proxy's near-identical behavior to the value proxy suggests that a low-rank approximation effectively captures value-space drift. In the first layer, drift is confined to the most recently decoded tokens, resulting in an approximated diagonal structure; off-diagonal elements indicate non-strict left-to-right decoding patterns. In later layers, drift propagates to more tokens via self-attention. By the last layer (32rd layer), a lower-triangular pattern emerges, indicating that final output states fluctuate mainly among previously decoded tokens while more distant further tokens remain stable.
+          <strong>Figure 1:</strong> Extended analysis of adjacent-step state similarities. We visualize the similarities across four features (input, value, singular proxy, and output) for representative layers (1, 12, 24, and 32) of LLaDA-8B-Instruct. The value proxy uncovers drift in the final FFN output more effectively than input states. Furthermore, the singular proxy's near-identical behavior to the value proxy suggests that a low-rank approximation effectively captures value-space drift.
+          <!-- In the first layer, drift is confined to the most recently decoded tokens, resulting in an approximated diagonal structure; off-diagonal elements indicate non-strict left-to-right decoding patterns. In later layers, drift propagates to more tokens via self-attention. By the last layer (32rd layer), a lower-triangular pattern emerges, indicating that final output states fluctuate mainly among previously decoded tokens while more distant further tokens remain stable. -->
         </p>
 
         <div class="figure-grid two-col">
@@ -56,7 +57,8 @@
         </div>
 
         <p class="caption">
-          <strong>Figure 2:</strong> Magnitude of drift across layers and decoding steps. To quantify drift intensity, we plot the fraction of drifting tokens across various similarity thresholds (0.1-0.9). Middle layers exhibit higher drift magnitudes compared to early and late layers, aligning with our observations in Section 3.4 and motivating our layer-wise adaptive budget allocation. The relative stability of drift magnitude across decoding steps justifies the use of a step-invariant budget.
+          <strong>Figure 2:</strong> Magnitude of drift across layers and decoding steps. To quantify drift intensity, we plot the fraction of drifting tokens across various similarity thresholds (0.1-0.9). Middle layers exhibit higher drift magnitudes compared to early and late layers, aligning with our observations in Section 3.4 and motivating our layer-wise adaptive budget allocation.
+          <!-- The relative stability of drift magnitude across decoding steps justifies the use of a step-invariant budget. -->
         </p>
         <div class="figure-grid one-col">
           <figure class="figure-card ratio-wide">
@@ -72,7 +74,7 @@
         <p class="caption">
           <strong>Table 1:</strong> Performance comparison against KV cache baselines (dKV-Cache, Elastic-Cache, and d2Cache). Metrics include Tokens Per Second (TPS), Time To First Token (TTFT), and Accuracy (std. dev. in parentheses) on LLaDA-8B-Instruct and Dream-v0-Instruct-7B.
         </p>
-        <div class="legend-note">Rows marked as Ours are highlighted.</div>
+        <!-- <div class="legend-note">Rows marked as Ours are highlighted.</div> -->
         <div class="table-wrap">
           <table>
             <thead>
@@ -193,7 +195,7 @@
         <h2>3. Additional Ablation Study on Singular Proxy Rank</h2>
 
         <p class="caption"><strong>Table 2:</strong> Influence of singular proxy rank ($r$) on LLaDA-8B-Instruct (MBPP).</p>
-        <div class="legend-note">In Tables 2-5, highlighted rows denote the default configuration marked with *.</div>
+        <!-- <div class="legend-note">In Tables 2-5, highlighted rows denote the default configuration marked with *.</div> -->
         <div class="table-wrap">
           <table>
             <thead>
@@ -300,16 +302,6 @@
 
       <section class="section-card" id="sec-4">
         <h2>4. Sensitivity Analysis of Adaptive Budget Allocation</h2>
-        <p class="caption">
-          <strong>Figure 3:</strong> Visualization of four noisy configurations. We evaluate the robustness of our Adaptive Budget Allocation by shifting $l_p$ away from its optimal value across four noisy configurations as shown below.
-        </p>
-        <div class="figure-grid one-col">
-          <figure class="figure-card ratio-wide">
-            <a class="figure-pdf-link" href="assets/budget_ablation_LLaDA-8B-Instruct.pdf" target="_blank" rel="noopener" aria-label="Figure 3 - Budget allocation noisy configurations (open in new tab)">
-              <canvas class="pdf-canvas" data-pdf="assets/budget_ablation_LLaDA-8B-Instruct.pdf"></canvas>
-            </a>
-          </figure>
-        </div>
 
         <p class="caption">
           <strong>Table 4:</strong> Impact of $l_p$ variations on LLaDA-8B-Instruct (GSM8K). Our primary configuration balances efficiency and accuracy optimally. Performance remains stable despite variations in $l_p$, demonstrating the robustness of our adaptive strategy.
@@ -384,6 +376,17 @@
               </tr>
             </tbody>
           </table>
+        </div>
+
+        <p class="caption">
+          <strong>Figure 3:</strong> Visualization of four noisy configurations. We evaluate the robustness of our Adaptive Budget Allocation by shifting $l_p$ away from its optimal value across four noisy configurations as shown below.
+        </p>
+        <div class="figure-grid one-col">
+          <figure class="figure-card ratio-wide">
+            <a class="figure-pdf-link" href="assets/budget_ablation_LLaDA-8B-Instruct.pdf" target="_blank" rel="noopener" aria-label="Figure 3 - Budget allocation noisy configurations (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/budget_ablation_LLaDA-8B-Instruct.pdf"></canvas>
+            </a>
+          </figure>
         </div>
       </section>
 
