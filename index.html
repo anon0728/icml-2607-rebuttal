@@ -487,30 +487,18 @@
           </figure>
         </div>
 
-        <h3>5.3 The Truncated Subspace Assumption (Theorem 3.4)</h3>
+        <h3>5.3 Stable Attention Assumption (Theorem 3.1)</h3>
         <p class="caption">
-          <strong>Figure 6:</strong> Validation of the Truncated Subspace Assumption ($h \in \mathcal{span}(V_r)$) via Projection Energy Ratio (PER). We calculate PER as $\frac{1}{N}\sum_{i=1}^{N}\frac{\|V_r V_r^T h_i\|^2}{\|h_i\|^2}$. A PER near 1 indicates that the subspace $\text{span}(V_r)$ effectively captures the energy of states $h$. For both models, PER exceeds 0.9 across all layers when $r >= 128$ (LLaDA) or $r >= 32$ (Dream), validating our subspace truncation approach.
-        </p>
-        <div class="figure-grid one-col">
-          <figure class="figure-card ratio-wide">
-            <a class="figure-pdf-link" href="assets/span_assumption.pdf" target="_blank" rel="noopener" aria-label="Figure 6 - Truncated subspace assumption (open in new tab)">
-              <canvas class="pdf-canvas" data-pdf="assets/span_assumption.pdf"></canvas>
-            </a>
-          </figure>
-        </div>
-
-        <h3>5.4 Stable Attention Assumption (Theorem 3.1)</h3>
-        <p class="caption">
-          <strong>Figure 7:</strong> Empirical distribution of attention shift. We observe that $\delta_A = \sum_{j}|\alpha^{t+1}_{ij} - \alpha^t_{ij}|$ is generally small. A transient spike in $\delta_A$ occurs during the initial decoding step for LLaDA-8B; however, as shown in Table 5, this does not negatively impact final performance.
+          <strong>Figure 6:</strong> Empirical distribution of attention shift. We observe that $\delta_A = \sum_{j}|\alpha^{t+1}_{ij} - \alpha^t_{ij}|$ is generally small. A transient spike in $\delta_A$ occurs during the initial decoding step for LLaDA-8B; however, as shown in Table 5, this does not negatively impact final performance.
         </p>
         <div class="figure-grid two-col">
           <figure class="figure-card ratio-wide">
-            <a class="figure-pdf-link" href="assets/assumption_attn_LLaDA-8B-Instruct.pdf" target="_blank" rel="noopener" aria-label="Figure 7 - Stable attention assumption for LLaDA (open in new tab)">
+            <a class="figure-pdf-link" href="assets/assumption_attn_LLaDA-8B-Instruct.pdf" target="_blank" rel="noopener" aria-label="Figure 6 - Stable attention assumption for LLaDA (open in new tab)">
               <canvas class="pdf-canvas" data-pdf="assets/assumption_attn_LLaDA-8B-Instruct.pdf"></canvas>
             </a>
           </figure>
           <figure class="figure-card ratio-wide">
-            <a class="figure-pdf-link" href="assets/assumption_attn_Dream-v0-Instruct-7B.pdf" target="_blank" rel="noopener" aria-label="Figure 7 - Stable attention assumption for Dream (open in new tab)">
+            <a class="figure-pdf-link" href="assets/assumption_attn_Dream-v0-Instruct-7B.pdf" target="_blank" rel="noopener" aria-label="Figure 6 - Stable attention assumption for Dream (open in new tab)">
               <canvas class="pdf-canvas" data-pdf="assets/assumption_attn_Dream-v0-Instruct-7B.pdf"></canvas>
             </a>
           </figure>
@@ -562,16 +550,38 @@
             </tbody>
           </table>
         </div>
+        <h3>5.4 The Boundaries in Theorem 3.1</h3>
+        <p class="caption">
+          <strong>Figure 7:</strong> Empirical coverage of the theoretical bound. We visualize the distribution of output state dissimilarities to validate the bound established in Theorem 3.1. Using practical constants $C=1.1$ and $\epsilon=0.1$ accounts for more than 99% of the observed fluctuations in the output hidden states.
+        </p>
+        <div class="figure-grid one-col">
+          <figure class="figure-card ratio-wide">
+            <a class="figure-pdf-link" href="assets/sim_correlation_LLaDA-8B-Instruct.pdf" target="_blank" rel="noopener" aria-label="Figure 7 - Empirical coverage of the theoretical bound (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/sim_correlation_LLaDA-8B-Instruct.pdf"></canvas>
+            </a>
+          </figure>
+        </div>
+        <h3>5.5 The Truncated Subspace Assumption (Theorem 3.4)</h3>
+        <p class="caption">
+          <strong>Figure 8:</strong> Validation of the Truncated Subspace Assumption ($h \in \mathcal{span}(V_r)$) via Projection Energy Ratio (PER). We calculate PER as $\frac{1}{N}\sum_{i=1}^{N}\frac{\|V_r V_r^T h_i\|^2}{\|h_i\|^2}$. A PER near 1 indicates that the subspace $\text{span}(V_r)$ effectively captures the energy of states $h$. For both models, PER exceeds 0.9 across all layers when $r >= 128$ (LLaDA) or $r >= 32$ (Dream), validating our subspace truncation approach.
+        </p>
+        <div class="figure-grid one-col">
+          <figure class="figure-card ratio-wide">
+            <a class="figure-pdf-link" href="assets/span_assumption.pdf" target="_blank" rel="noopener" aria-label="Figure 8 - Truncated subspace assumption (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/span_assumption.pdf"></canvas>
+            </a>
+          </figure>
+        </div>
       </section>
 
       <section class="section-card" id="sec-6">
         <h2>6. Throughput-Memory Trade-off Analysis</h2>
         <p class="caption">
-          <strong>Figure 8:</strong> Efficiency-memory trade-off across varying batch sizes. We evaluate the relationship between throughput (TPS) and GPU memory consumption. As batch size increases, throughput improves due to enhanced hardware utilization and parallelism. However, this gain is balanced by a concurrent increase in memory footprint.
+          <strong>Figure 9:</strong> Efficiency-memory trade-off across varying batch sizes. We evaluate the relationship between throughput (TPS) and GPU memory consumption. As batch size increases, throughput improves due to enhanced hardware utilization and parallelism. However, this gain is balanced by a concurrent increase in memory footprint.
         </p>
         <div class="figure-grid one-col">
           <figure class="figure-card ratio-wide">
-            <a class="figure-pdf-link" href="assets/batch_size_tps_memory.pdf" target="_blank" rel="noopener" aria-label="Figure 8 - Throughput memory trade-off (open in new tab)">
+            <a class="figure-pdf-link" href="assets/batch_size_tps_memory.pdf" target="_blank" rel="noopener" aria-label="Figure 9 - Throughput memory trade-off (open in new tab)">
               <canvas class="pdf-canvas" data-pdf="assets/batch_size_tps_memory.pdf"></canvas>
             </a>
           </figure>
