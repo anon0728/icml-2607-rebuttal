@@ -572,16 +572,25 @@
             </a>
           </figure>
         </div>
-      </section>
-
-      <section class="section-card" id="sec-6">
-        <h2>6. Throughput-Memory Trade-off Analysis</h2>
         <p class="caption">
-          <strong>Figure 9:</strong> Efficiency-memory trade-off across varying batch sizes. We evaluate the relationship between throughput (TPS) and GPU memory consumption. As batch size increases, throughput improves due to enhanced hardware utilization and parallelism. However, this gain is balanced by a concurrent increase in memory footprint.
+          <strong>Figure 9:</strong> Divergence between value similarity and singular proxy similarity. The divergence remains consistently low (typically $< 0.03$) across layers, demonstrating that the singular proxy accurately approximates the dynamics of the full value space and validing the Theorem 3.4.
         </p>
         <div class="figure-grid one-col">
           <figure class="figure-card ratio-wide">
-            <a class="figure-pdf-link" href="assets/batch_size_tps_memory.pdf" target="_blank" rel="noopener" aria-label="Figure 9 - Throughput memory trade-off (open in new tab)">
+            <a class="figure-pdf-link" href="assets/assumption_proxy_LLaDA-8B-Instruct.pdf" target="_blank" rel="noopener" aria-label="Figure 9 - Theorem 3.4 (open in new tab)">
+              <canvas class="pdf-canvas" data-pdf="assets/assumption_proxy_LLaDA-8B-Instruct.pdf"></canvas>
+            </a>
+          </figure>
+        </div>
+      </section>
+      <section class="section-card" id="sec-6">
+        <h2>6. Throughput-Memory Trade-off Analysis</h2>
+        <p class="caption">
+          <strong>Figure 10:</strong> Efficiency-memory trade-off across varying batch sizes. We evaluate the relationship between throughput (TPS) and GPU memory consumption. As batch size increases, throughput improves due to enhanced hardware utilization and parallelism. However, this gain is balanced by a concurrent increase in memory footprint.
+        </p>
+        <div class="figure-grid one-col">
+          <figure class="figure-card ratio-wide">
+            <a class="figure-pdf-link" href="assets/batch_size_tps_memory.pdf" target="_blank" rel="noopener" aria-label="Figure 10 - Throughput memory trade-off (open in new tab)">
               <canvas class="pdf-canvas" data-pdf="assets/batch_size_tps_memory.pdf"></canvas>
             </a>
           </figure>
